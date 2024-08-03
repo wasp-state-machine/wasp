@@ -14,11 +14,7 @@ development</Description>
     </PropertyGroup>
 
     <ItemGroup>
-        <None Include="README.md" Pack="true" PackagePath="\"/>
+        <None Include="../README.md" Pack="true" PackagePath="\"/>
         <Src Include="src/**/*.*" Pack="true" PackagePath="\"/>
-    </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="test\" />
     </ItemGroup>
 </Project>

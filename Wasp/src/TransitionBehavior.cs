@@ -4,20 +4,22 @@ public partial class Machine<TState, TTrigger> where TState : notnull where TTri
 {
     public class TransitionBehavior
     {
-        public TransitionBehavior(TTrigger trigger, TState destination, Guard? guard)
+        public TransitionBehavior(TTrigger trigger, TState destination, Guard? guard = null, int weight = 0)
         {
             Trigger = trigger;
             Destination = destination;
-            Guard = guard;
+            _guard = guard;
+            Weight = weight;
         }
 
         public bool GuardIsMet(TriggerParams? triggerParams)
         {
-            return (Guard == null || Guard.Value(triggerParams));
+            return (_guard == null || _guard.Value(triggerParams));
         }
 
-        public TTrigger Trigger;
-        public TState Destination;
-        public Guard? Guard;
+        public readonly TTrigger Trigger;
+        public readonly TState Destination;
+        private readonly Guard? _guard;
+        public int Weight;
     }
 }

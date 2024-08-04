@@ -1,3 +1,3 @@
 namespace Wasp;
 
-public abstract class TriggerParams {}
+public abstract class TriggerParams { }

@@ -13,15 +13,15 @@ public partial class Machine<TState, TTrigger> where TState : notnull where TTri
     
         public StateConfig Permit(TTrigger trigger, TState destination)
         {
-            TransitionBehavior transitionBehavior = new TransitionBehavior(trigger, destination, null);
+            TransitionBehavior transitionBehavior = new TransitionBehavior(trigger, destination);
             AddTriggerBehavior(transitionBehavior);
             return this;
         }
         
-        public StateConfig PermitIf(TTrigger trigger, TState destination, Func<TriggerParams?, bool> clause)
+        public StateConfig PermitIf(TTrigger trigger, TState destination, Func<TriggerParams?, bool> clause, int weight = 0)
         {
             Guard guard = new Guard(clause);
-            TransitionBehavior transitionBehavior = new TransitionBehavior(trigger, destination, guard);
+            TransitionBehavior transitionBehavior = new TransitionBehavior(trigger, destination, guard, weight);
             AddTriggerBehavior(transitionBehavior);
             return this;
         }

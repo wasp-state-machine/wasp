@@ -1,3 +1,5 @@
+using System.Diagnostics;
+
 namespace Wasp;
 
 public partial class Machine<TState, TTrigger> where TState : notnull where TTrigger : notnull
@@ -7,24 +9,24 @@ public partial class Machine<TState, TTrigger> where TState : notnull where TTri
     {
         var transitionBehaviors = GetTransitionBehaviors(trigger);
         if (transitionBehaviors == null) return;
-
+        
+        // Execute guard clauses
         var passedGuard = transitionBehaviors
             .Where(h => h.GuardIsMet(triggerParams))
             .ToList();
-
-        Console.Out.WriteLine("passedGuard length: " + passedGuard.Count.ToString());
         
-        HandleAmbiguousTransition(trigger, passedGuard);
+        // Discard low-weight behaviors
+        int heaviestWeight = passedGuard.Max(h => h.Weight);
+        var heaviestBehaviors = passedGuard
+            .Where(h => h.Weight == heaviestWeight)
+            .ToList();
         
-        foreach (var transitionBehavior in passedGuard)
-        {
-            
-            _currentState = transitionBehavior.Destination;
-            // do callbacks here
-            return;
-        }
+        // heaviestBehaviors.Count should now be 1
+        HandleAmbiguousTransition(trigger, heaviestBehaviors);
+        
+        _currentState = heaviestBehaviors[0].Destination;
     }
-
+    
     private void HandleAmbiguousTransition(TTrigger trigger, IEnumerable<TransitionBehavior> transitionBehaviors)
     {
         if (transitionBehaviors.Count() <= 1) return;

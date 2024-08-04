@@ -107,4 +107,56 @@ public class PermitIf
         
         Assert.Equal(State.B, machine.State());
     }
+
+    [Fact]
+    public void AmbiguousWithWeight()
+    {
+        var machine1 = new Machine<State, Trigger>(State.A);
+
+        machine1.Configure(State.A)
+            .PermitIf(Trigger.X, State.D, _ => true, 5)
+            .PermitIf(Trigger.X, State.C, _ => true, 5);
+
+        Assert.Throws<InvalidOperationException>(() => { machine1.Fire(Trigger.X); });
+        
+        
+        var machine2 = new Machine<State, Trigger>(State.A);
+
+        machine2.Configure(State.A)
+            .PermitIf(Trigger.X, State.D, GtZero, -9)
+            .PermitIf(Trigger.X, State.C, GtZero, -9);
+
+        var testParams = new TestParams() { ParamA = 3 };
+        Assert.Throws<InvalidOperationException>(() => { machine2.Fire(Trigger.X, testParams); });
+    }
+    
+    [Fact]
+    public void BreakAmbiguityWithWeight()
+    {
+        var machine1 = new Machine<State, Trigger>(State.A);
+
+        machine1.Configure(State.A)
+            .PermitIf(Trigger.X, State.B, _ => true, 0)
+            .PermitIf(Trigger.X, State.C, _ => true, 5);
+
+        machine1.Fire(Trigger.X);
+        
+        Assert.Equal(State.C, machine1.State());
+        
+        var machine2 = new Machine<State, Trigger>(State.A);
+
+        machine2.Configure(State.A)
+            .PermitIf(Trigger.X, State.C, GtZero, -15)
+            .PermitIf(Trigger.X, State.D, GtZero, -9);
+
+        var testParams = new TestParams() { ParamA = 3 };
+        
+        machine2.Fire(Trigger.X, testParams);
+        
+        Assert.Equal(State.D, machine2.State());
+
+        
+        
+        
+    }
 }

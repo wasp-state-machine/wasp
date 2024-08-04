@@ -19,6 +19,6 @@ public partial class Machine<TState, TTrigger> where TState : notnull where TTri
         return _currentState;
     }
     
-    private Dictionary<TState, StateConfig> _stateConfigs;
+    private IDictionary<TState, StateConfig> _stateConfigs;
     private TState _currentState;
 }

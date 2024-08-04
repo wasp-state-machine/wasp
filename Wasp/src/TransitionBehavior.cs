@@ -11,6 +11,11 @@ public partial class Machine<TState, TTrigger> where TState : notnull where TTri
             Guard = guard;
         }
 
+        public bool GuardIsMet(TriggerParams? triggerParams)
+        {
+            return (Guard == null || Guard.Value(triggerParams));
+        }
+
         public TTrigger Trigger;
         public TState Destination;
         public Guard? Guard;

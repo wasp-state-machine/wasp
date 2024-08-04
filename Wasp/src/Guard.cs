@@ -4,6 +4,17 @@ public partial class Machine<TState, TTrigger> where TState : notnull where TTri
 {
     public class Guard
     {
-        public Action<TriggerParams> Clause;
+
+        public Guard(Func<TriggerParams?, bool> clause)
+        {
+            Clause = clause;
+        }
+        
+        public bool Value(TriggerParams? triggerParams)
+        {
+            return (Clause(triggerParams));
+        }
+        public Func<TriggerParams?, bool> Clause;
+        
     }
 }

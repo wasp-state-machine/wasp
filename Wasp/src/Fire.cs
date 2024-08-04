@@ -7,12 +7,16 @@ public partial class Machine<TState, TTrigger> where TState : notnull where TTri
     {
         var transitionBehaviors = GetTransitionBehaviors(trigger);
         if (transitionBehaviors == null) return;
+
+        var passedGuard = transitionBehaviors
+            .Where(h => h.GuardIsMet(triggerParams))
+            .ToList();
+
+        Console.Out.WriteLine("passedGuard length: " + passedGuard.Count.ToString());
         
-        // check guard clauses here
+        HandleAmbiguousTransition(trigger, passedGuard);
         
-        HandleAmbiguousTransition(trigger, transitionBehaviors);
-        
-        foreach (var transitionBehavior in transitionBehaviors)
+        foreach (var transitionBehavior in passedGuard)
         {
             
             _currentState = transitionBehavior.Destination;
@@ -21,14 +25,12 @@ public partial class Machine<TState, TTrigger> where TState : notnull where TTri
         }
     }
 
-    private void HandleAmbiguousTransition(TTrigger trigger, List<TransitionBehavior> transitionBehaviors)
+    private void HandleAmbiguousTransition(TTrigger trigger, IEnumerable<TransitionBehavior> transitionBehaviors)
     {
-        if (transitionBehaviors.Count > 1)
-        {
-            string message = "Found multiple transitions available for state " + _currentState.ToString() +
-                             " with trigger " + trigger.ToString();
-            throw (new InvalidOperationException(message));
-        }
+        if (transitionBehaviors.Count() <= 1) return;
+        var message = "Found multiple transitions available for state " + _currentState.ToString() +
+                      " with trigger " + trigger.ToString();
+        throw (new InvalidOperationException(message));
     }
 
 }

@@ -2,8 +2,5 @@ namespace Wasp;
 
 public partial class Machine<TState, TTrigger> where TState : notnull where TTrigger : notnull
 {
-    public class Guard
-    {
-        public Action<TriggerParams> Clause;
-    }
+    public abstract class TriggerParams {}
 }

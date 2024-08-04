@@ -7,7 +7,7 @@ public partial class Machine<TState, TTrigger> where TState : notnull where TTri
         public StateConfig(TState state)
         {
             State = state;
-            TriggerBehaviors = new Dictionary<TTrigger, List<TransitionBehavior>>();
+            TriggerBehaviorDict = new Dictionary<TTrigger, List<TransitionBehavior>>();
             _superStates = new List<TState>();
         }
     
@@ -20,14 +20,14 @@ public partial class Machine<TState, TTrigger> where TState : notnull where TTri
 
         private void AddTriggerBehavior(TransitionBehavior transitionBehavior)
         {
-            if (!TriggerBehaviors.ContainsKey(transitionBehavior.Trigger))
+            if (!TriggerBehaviorDict.ContainsKey(transitionBehavior.Trigger))
             {
-                TriggerBehaviors[transitionBehavior.Trigger] = [];
+                TriggerBehaviorDict[transitionBehavior.Trigger] = [];
             }
-            TriggerBehaviors[transitionBehavior.Trigger].Add(transitionBehavior);
+            TriggerBehaviorDict[transitionBehavior.Trigger].Add(transitionBehavior);
         }
         
-        public Dictionary<TTrigger, List<TransitionBehavior>> TriggerBehaviors;
+        public Dictionary<TTrigger, List<TransitionBehavior>> TriggerBehaviorDict;
         private List<TState> _superStates;
         public TState State;
     }

@@ -5,6 +5,6 @@ public partial class Machine<TState, TTrigger> where TState : notnull where TTri
     private ICollection<TransitionBehavior>? GetTransitionBehaviors(TTrigger trigger)
     {
         if (!_stateConfigs.TryGetValue(_currentState, out var stateConfig)) return null;
-        return stateConfig.TriggerBehaviorDict.GetValueOrDefault(trigger);
+        return stateConfig.TransitionBehaviorDict.GetValueOrDefault(trigger);
     }
 }

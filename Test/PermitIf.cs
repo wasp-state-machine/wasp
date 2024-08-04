@@ -155,8 +155,5 @@ public class PermitIf
         
         Assert.Equal(State.D, machine2.State());
 
-        
-        
-        
     }
 }

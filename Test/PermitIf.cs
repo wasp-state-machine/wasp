@@ -5,6 +5,21 @@ using Xunit;
 
 public class PermitIf
 {
+    
+    private static bool GtZero(TriggerParams? t)
+    {
+        if (t is null) return false;
+        var testParams = (TestParams)t;
+        return testParams.ParamA > 0;
+    }
+        
+    private static bool LtZero(TriggerParams? t)
+    {
+        if (t is null) return false;
+        var testParams = (TestParams)t;
+        return testParams.ParamA < 0;
+    }
+    
     [Fact]
     public void Basic()
     {
@@ -32,13 +47,23 @@ public class PermitIf
     [Fact]
     public void AssertAmbiguousTransition()
     {
-        var machine = new Machine<State, Trigger>(State.A);
+        var machine1 = new Machine<State, Trigger>(State.A);
 
-        machine.Configure(State.A)
+        machine1.Configure(State.A)
             .PermitIf(Trigger.X, State.D, _ => true)
             .PermitIf(Trigger.X, State.C, _ => true);
 
-        Assert.Throws<InvalidOperationException>(() => { machine.Fire(Trigger.X); });
+        Assert.Throws<InvalidOperationException>(() => { machine1.Fire(Trigger.X); });
+        
+        
+        var machine2 = new Machine<State, Trigger>(State.A);
+
+        machine2.Configure(State.A)
+            .PermitIf(Trigger.X, State.D, GtZero)
+            .PermitIf(Trigger.X, State.C, GtZero);
+
+        var testParams = new TestParams() { ParamA = 3 };
+        Assert.Throws<InvalidOperationException>(() => { machine2.Fire(Trigger.X, testParams); });
     }
 
     [Fact]
@@ -59,29 +84,27 @@ public class PermitIf
         
         Assert.Equal(State.B, machine.State());
         
-        machine.Fire(Trigger.X, new TestParams() { ParamA = 3}); // unnecessary params should be ignored
-        // make its own test case prob
+        machine.Fire(Trigger.X);
         
         Assert.Equal(State.A, machine.State());
         
         machine.Fire(Trigger.X, new TestParams() { ParamA = -3});
         
         Assert.Equal(State.C, machine.State());
+    }
+
+    [Fact]
+    public void IgnoreUnnecessaryParams()
+    {
+        var machine = new Machine<State, Trigger>(State.A);
+
+        machine.Configure(State.A)
+            .Permit(Trigger.X, State.B);
         
-        return;
+        Assert.Equal(State.A, machine.State());
         
-        bool GtZero(TriggerParams? t)
-        {
-            if (t is null) return false;
-            var testParams = (TestParams)t;
-            return testParams.ParamA > 0;
-        }
+        machine.Fire(Trigger.X, new TestParams() { ParamA = 3});
         
-        bool LtZero(TriggerParams? t)
-        {
-            if (t is null) return false;
-            var testParams = (TestParams)t;
-            return testParams.ParamA < 0;
-        }
+        Assert.Equal(State.B, machine.State());
     }
 }

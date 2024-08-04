@@ -2,6 +2,8 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wasp", "Wasp\Wasp.csproj", "{B4A7C99C-C996-4495-AD16-244E507AA92C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test", "Test\Test.csproj", "{1DF14E79-1EFA-4AB5-9FE4-017A8115F020}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -12,5 +14,9 @@ Global
 		{B4A7C99C-C996-4495-AD16-244E507AA92C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B4A7C99C-C996-4495-AD16-244E507AA92C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B4A7C99C-C996-4495-AD16-244E507AA92C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1DF14E79-1EFA-4AB5-9FE4-017A8115F020}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1DF14E79-1EFA-4AB5-9FE4-017A8115F020}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1DF14E79-1EFA-4AB5-9FE4-017A8115F020}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1DF14E79-1EFA-4AB5-9FE4-017A8115F020}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

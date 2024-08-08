@@ -2,9 +2,9 @@ namespace Wasp;
 
 public partial class Machine<TState, TTrigger> where TState : notnull where TTrigger : notnull
 {
-    public class TransitionBehavior
+    internal class TransitionBehavior
     {
-        public TransitionBehavior(TTrigger trigger, TState origin, TState destination, Func<TriggerParams?,
+        internal TransitionBehavior(TTrigger trigger, TState origin, TState destination, Func<TriggerParams?,
                 bool>? guardClause = null, int weight = 0)
         {
             Trigger = trigger;
@@ -15,12 +15,12 @@ public partial class Machine<TState, TTrigger> where TState : notnull where TTri
             Weight = weight;
         }
 
-        public bool GuardIsMet(TriggerParams? triggerParams)
+        internal bool GuardIsMet(TriggerParams? triggerParams)
         {
             return (GuardClause == null || GuardClause(triggerParams));
         }
         
-        public void AddAction(Action<TriggerParams?> action)
+        internal void AddAction(Action<TriggerParams?> action)
         {
             _actions.Add(action);
         }
@@ -36,11 +36,11 @@ public partial class Machine<TState, TTrigger> where TState : notnull where TTri
             }
         }
         
-        public readonly TTrigger Trigger;
-        public readonly TState Destination;
-        public readonly TState Origin;
-        public Func<TriggerParams?, bool>? GuardClause;
+        internal readonly TTrigger Trigger;
+        internal readonly TState Destination;
+        internal readonly TState Origin;
+        internal Func<TriggerParams?, bool>? GuardClause;
         private List<Action<TriggerParams?>> _actions;
-        public readonly int Weight;
+        internal readonly int Weight;
     }
 }

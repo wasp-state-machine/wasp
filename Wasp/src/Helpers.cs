@@ -8,11 +8,19 @@ public partial class Machine<TState, TTrigger> where TState : notnull where TTri
         return stateConfig.TransitionBehaviorDict.GetValueOrDefault(trigger);
     }
 
-    private void ExecuteActionCollection(List<Action<TriggerParams?>> actions, TriggerParams? triggerParams)
+    private static void ExecuteActionCollection(List<Action<TriggerParams?>> actions, TriggerParams? triggerParams)
     {
         foreach (var action in actions)
         {
             action(triggerParams);
+        }
+    }
+
+    private static void PrintCollection<T>(IEnumerable<T> collection)
+    {
+        foreach (var item in collection)
+        {
+            Console.Out.WriteLine(item.ToString());
         }
     }
 }

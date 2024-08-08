@@ -10,7 +10,7 @@ public partial class Machine<TState, TTrigger> where TState : notnull where TTri
 
     public StateConfig Configure(TState state)
     {
-        if (!_stateConfigs.ContainsKey(state)) _stateConfigs[state] = new StateConfig(state);
+        if (!_stateConfigs.ContainsKey(state)) _stateConfigs[state] = new StateConfig(state, this);
         return _stateConfigs[state];
     }
     

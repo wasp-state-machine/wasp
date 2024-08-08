@@ -16,9 +16,9 @@ machine.Fire(Trigger.X);
 Wasp is heavily inspired by [Stateless](https://github.com/dotnet-state-machine/stateless/tree/dev), and mirrors most of its patterns. Wasp adds a few features, such as
 
 - Mutually-inclusive guard clauses
+- Non-linear state inheritance
+- Weakly-typed parameterized transitions
 - State overriding
-- Multi-state inheritance
-- More generalizable parameterized transitions
 - A significantly lighter codebase
 
 Wasp currently does not support

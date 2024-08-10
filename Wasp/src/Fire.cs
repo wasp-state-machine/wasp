@@ -7,18 +7,23 @@ public partial class Machine<TState, TTrigger> where TState : notnull where TTri
     
     public void Fire(TTrigger trigger, TriggerParams? triggerParams = null)
     {
-        TransitionBehavior? transitionBehavior = DetermineTransitionBehavior(trigger, triggerParams);
+        var originStateConfigs = GetOriginStateConfigs(_currentState, trigger, triggerParams);
+        TransitionBehavior? transitionBehavior = DetermineTransitionBehavior(originStateConfigs, trigger, triggerParams);
         if (transitionBehavior is null) return;
 
-        HandleOriginStates(transitionBehavior.Origin, trigger, triggerParams);
         
         _currentState = transitionBehavior.Destination;
     }
     
-    private TransitionBehavior? DetermineTransitionBehavior(TTrigger trigger, TriggerParams? triggerParams)
+    private TransitionBehavior? DetermineTransitionBehavior(List<StateConfig>? originStateConfigs, TTrigger trigger, TriggerParams? triggerParams)
     {
-        var transitionBehaviors = GetTransitionBehaviors(trigger);
-        if (transitionBehaviors == null) return null;
+        if (originStateConfigs == null) return null;
+
+        var transitionBehaviors = originStateConfigs
+            .SelectMany(h => GetTransitionBehaviors(h, trigger) ?? [])
+            .ToList();
+        
+        if (transitionBehaviors.Count == 0) return null;
         
         var passedGuard = transitionBehaviors
             .Where(h => h.GuardIsMet(triggerParams))
@@ -38,12 +43,11 @@ public partial class Machine<TState, TTrigger> where TState : notnull where TTri
         return heaviestBehaviors[0];
     }
 
-    private void HandleOriginStates(TState originState, TTrigger trigger, TriggerParams? triggerParams)
+    private List<StateConfig>? GetOriginStateConfigs(TState originState, TTrigger trigger, TriggerParams? triggerParams)
     {
-        if (!_stateConfigs.ContainsKey(originState)) return;
+        if (!_stateConfigs.ContainsKey(originState)) return null;
         var originStateConfigs = _stateConfigs[originState].GetSuperStateConfigs();
-        Console.Out.WriteLine("Superstates:");
-        PrintCollection(originStateConfigs);
+        return originStateConfigs;
     }
     
     private static void HandleAmbiguousTransitions(TTrigger trigger, List<TransitionBehavior> transitionBehaviors)

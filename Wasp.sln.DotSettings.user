@@ -2,9 +2,19 @@
 	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=2ef8c8ea_002D292f_002D4f40_002Db8ba_002D137a894b9a65/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="All tests from Solution" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
   &lt;Solution /&gt;
 &lt;/SessionState&gt;</s:String>
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=4c001ad9_002D65ff_002D4c20_002Da6b8_002D787e2ca928c6/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="Basic" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=4c001ad9_002D65ff_002D4c20_002Da6b8_002D787e2ca928c6/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="Basic" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
   &lt;TestAncestor&gt;
     &lt;TestId&gt;xUnit::1DF14E79-1EFA-4AB5-9FE4-017A8115F020::net8.0::Test.SuperStates.Basic&lt;/TestId&gt;
+    &lt;TestId&gt;xUnit::1DF14E79-1EFA-4AB5-9FE4-017A8115F020::net8.0::Test.Permit&lt;/TestId&gt;
+    &lt;TestId&gt;xUnit::1DF14E79-1EFA-4AB5-9FE4-017A8115F020::net8.0::Test.PermitIf&lt;/TestId&gt;
+    &lt;TestId&gt;xUnit::1DF14E79-1EFA-4AB5-9FE4-017A8115F020::net8.0::Test.SuperStates.AmbiguousSuperstate&lt;/TestId&gt;
+  &lt;/TestAncestor&gt;
+&lt;/SessionState&gt;</s:String>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=cae21b40_002Df499_002D4db0_002Da966_002Ddaa9fb254503/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="Basic #2" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
+  &lt;TestAncestor&gt;
+    &lt;TestId&gt;xUnit::1DF14E79-1EFA-4AB5-9FE4-017A8115F020::net8.0::Test.SuperStates.Basic&lt;/TestId&gt;
+    &lt;TestId&gt;xUnit::1DF14E79-1EFA-4AB5-9FE4-017A8115F020::net8.0::Test.SuperStates.AmbiguousSuperstate&lt;/TestId&gt;
+    &lt;TestId&gt;xUnit::1DF14E79-1EFA-4AB5-9FE4-017A8115F020::net8.0::Test.SuperStates.Guard&lt;/TestId&gt;
   &lt;/TestAncestor&gt;
 &lt;/SessionState&gt;</s:String>
 	<s:Boolean x:Key="/Default/UserDictionary/Words/=Substate/@EntryIndexedValue">True</s:Boolean></wpf:ResourceDictionary>

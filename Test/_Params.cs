@@ -2,7 +2,7 @@ using Wasp;
 
 namespace Test;
 
-public class TestParams : TriggerParams
+internal class TestParams : TriggerParams
 {
     public int ParamA;
     public int ParamB;

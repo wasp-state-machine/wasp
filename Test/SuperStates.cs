@@ -92,5 +92,43 @@ public class SuperStates
         TestParams testParams = new TestParams() { ParamA = 0 };
         Assert.Throws<InvalidOperationException>(() => { machine.Fire(Trigger.X, testParams); });
     }
+
+    [Fact]
+    public void AmbiguousGuardWeight()
+    {
+        var machine1 = new Machine<State, Trigger>(State.A);
+
+        machine1.Configure(State.A)
+            .PermitIf(Trigger.X, State.B, GeZero, 20)
+            .SubstateOf(State.C)
+            .SubstateOf(State.D)
+            .SubstateOf(State.A);
+
+        machine1.Configure(State.C)
+            .PermitIf(Trigger.X, State.D, LeZero, 20);
+        
+        TestParams testParams = new TestParams() { ParamA = 0 };
+        
+        Assert.Throws<InvalidOperationException>(() => { machine1.Fire(Trigger.X, testParams); });
+        
+        var machine2 = new Machine<State, Trigger>(State.A);
+
+        machine2.Configure(State.A)
+            .PermitIf(Trigger.X, State.B, GeZero, 10)
+            .SubstateOf(State.C);
+
+        machine2.Configure(State.C)
+            .PermitIf(Trigger.X, State.D, LeZero, 20);
+
+        
+        machine2.Fire(Trigger.X, testParams);
+        
+        Assert.Equal(State.D, machine2.State());
+        
+    }
+    
+    
+    
+    ///
     
 }

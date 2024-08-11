@@ -1,5 +1,11 @@
 ﻿<wpf:ResourceDictionary xml:space="preserve" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:ss="urn:shemas-jetbrains-com:settings-storage-xaml" xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=0a694eca_002Dc032_002D4f34_002D8ecb_002D8da3a4dbf7c8/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="All tests from Solution #5" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
+  &lt;Solution /&gt;
+&lt;/SessionState&gt;</s:String>
 	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=2ef8c8ea_002D292f_002D4f40_002Db8ba_002D137a894b9a65/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="All tests from Solution" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
+  &lt;Solution /&gt;
+&lt;/SessionState&gt;</s:String>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=38290f77_002Dd669_002D4a23_002Dab5c_002D376153574eca/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="All tests from Solution #3" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
   &lt;Solution /&gt;
 &lt;/SessionState&gt;</s:String>
 	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=4c001ad9_002D65ff_002D4c20_002Da6b8_002D787e2ca928c6/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="Basic" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
@@ -10,11 +16,26 @@
     &lt;TestId&gt;xUnit::1DF14E79-1EFA-4AB5-9FE4-017A8115F020::net8.0::Test.SuperStates.AmbiguousSuperstate&lt;/TestId&gt;
   &lt;/TestAncestor&gt;
 &lt;/SessionState&gt;</s:String>
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=cae21b40_002Df499_002D4db0_002Da966_002Ddaa9fb254503/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="Basic #2" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=51a6cdd3_002D8502_002D4c8d_002D9027_002D1dea510df0c3/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="All tests from Solution #4" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
+  &lt;Solution /&gt;
+&lt;/SessionState&gt;</s:String>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=775f58c8_002D8d6a_002D4c11_002Db0e2_002Dea3ba9e1b842/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="All tests from Solution #2" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
+  &lt;Solution /&gt;
+&lt;/SessionState&gt;</s:String>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=84eda3f4_002Db885_002D4b46_002D9dc8_002Dccdafaf200a6/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="All tests from Solution #6" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
+  &lt;Solution /&gt;
+&lt;/SessionState&gt;</s:String>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=cae21b40_002Df499_002D4db0_002Da966_002Ddaa9fb254503/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="Basic #2" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
   &lt;TestAncestor&gt;
     &lt;TestId&gt;xUnit::1DF14E79-1EFA-4AB5-9FE4-017A8115F020::net8.0::Test.SuperStates.Basic&lt;/TestId&gt;
     &lt;TestId&gt;xUnit::1DF14E79-1EFA-4AB5-9FE4-017A8115F020::net8.0::Test.SuperStates.AmbiguousSuperstate&lt;/TestId&gt;
     &lt;TestId&gt;xUnit::1DF14E79-1EFA-4AB5-9FE4-017A8115F020::net8.0::Test.SuperStates.Guard&lt;/TestId&gt;
+    &lt;TestId&gt;xUnit::1DF14E79-1EFA-4AB5-9FE4-017A8115F020::net8.0::Test.SuperStates.AmbiguousGuardWeight&lt;/TestId&gt;
+  &lt;/TestAncestor&gt;
+&lt;/SessionState&gt;</s:String>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=ed57889d_002Dd00d_002D47ed_002Dae3f_002D5d64d00758a2/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="AmbiguousGuardWeight" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
+  &lt;TestAncestor&gt;
+    &lt;TestId&gt;xUnit::1DF14E79-1EFA-4AB5-9FE4-017A8115F020::net8.0::Test.SuperStates.AmbiguousGuardWeight&lt;/TestId&gt;
   &lt;/TestAncestor&gt;
 &lt;/SessionState&gt;</s:String>
 	<s:Boolean x:Key="/Default/UserDictionary/Words/=Substate/@EntryIndexedValue">True</s:Boolean></wpf:ResourceDictionary>

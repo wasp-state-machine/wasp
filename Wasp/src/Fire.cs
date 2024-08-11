@@ -7,18 +7,45 @@ public partial class Machine<TState, TTrigger> where TState : notnull where TTri
     
     public void Fire(TTrigger trigger, TriggerParams? triggerParams = null)
     {
-        var originStateConfigs = GetOriginStateConfigs(_currentState, trigger, triggerParams);
+        var originStateConfigs = GetSuperStateConfigs(_currentState);
+        if (originStateConfigs == null) return;
+        
         TransitionBehavior? transitionBehavior = DetermineTransitionBehavior(originStateConfigs, trigger, triggerParams);
         if (transitionBehavior is null) return;
+        
+        var destination = transitionBehavior.Destination;
+        var destinationStateConfigs = GetSuperStateConfigs(destination);
+        
+        var exitActions = originStateConfigs
+            .SelectMany(h => h.GetExitActions())
+            .ToList();
 
+        var exitFromActions = originStateConfigs
+            .SelectMany(h => h.GetExitFromActions(trigger))
+            .ToList();
+        
+        ExecuteActionCollection(exitActions, triggerParams);
+        ExecuteActionCollection(exitFromActions, triggerParams);
         
         _currentState = transitionBehavior.Destination;
+        
+        if (destinationStateConfigs == null) return;
+
+        var entryActions = destinationStateConfigs
+            .SelectMany(h => h.GetEntryActions())
+            .ToList();
+
+        var entryFromActions = destinationStateConfigs
+            .SelectMany(h => h.GetEntryFromActions(trigger))
+            .ToList();
+        
+        ExecuteActionCollection(entryActions, triggerParams);
+        ExecuteActionCollection(entryFromActions, triggerParams);
+
     }
     
-    private TransitionBehavior? DetermineTransitionBehavior(List<StateConfig>? originStateConfigs, TTrigger trigger, TriggerParams? triggerParams)
+    private TransitionBehavior? DetermineTransitionBehavior(List<StateConfig> originStateConfigs, TTrigger trigger, TriggerParams? triggerParams)
     {
-        if (originStateConfigs == null) return null;
-
         var transitionBehaviors = originStateConfigs
             .SelectMany(h => GetTransitionBehaviors(h, trigger) ?? [])
             .ToList();
@@ -43,10 +70,10 @@ public partial class Machine<TState, TTrigger> where TState : notnull where TTri
         return heaviestBehaviors[0];
     }
 
-    private List<StateConfig>? GetOriginStateConfigs(TState originState, TTrigger trigger, TriggerParams? triggerParams)
+    private List<StateConfig>? GetSuperStateConfigs(TState state)
     {
-        if (!_stateConfigs.ContainsKey(originState)) return null;
-        var originStateConfigs = _stateConfigs[originState].GetSuperStateConfigs();
+        if (!_stateConfigs.ContainsKey(state)) return null;
+        var originStateConfigs = _stateConfigs[state].GetSuperStateConfigs();
         return originStateConfigs;
     }
     

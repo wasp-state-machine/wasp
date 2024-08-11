@@ -11,6 +11,8 @@ public partial class Machine<TState, TTrigger> where TState : notnull where TTri
             TransitionBehaviorDict = new Dictionary<TTrigger, ICollection<TransitionBehavior>>();
             _entryActions = new List<Action<TriggerParams?>>();
             _exitActions = new List<Action<TriggerParams?>>();
+            _entryFromActions = new Dictionary<TTrigger, List<Action<TriggerParams?>>>();
+            _exitFromActions = new Dictionary<TTrigger, List<Action<TriggerParams?>>>();
             SuperStates = new List<TState>();
         }
     
@@ -38,6 +40,46 @@ public partial class Machine<TState, TTrigger> where TState : notnull where TTri
         {
             _exitActions.Add(action);
             return this;
+        }
+
+        public StateConfig OnEntryFrom(TTrigger trigger, Action<TriggerParams?> action)
+        {
+            if (!_entryFromActions.ContainsKey(trigger))
+            {
+                _entryFromActions[trigger] = [];
+            }
+            _entryFromActions[trigger].Add(action);
+            return this;
+        }
+        
+        public StateConfig OnExitFrom(TTrigger trigger, Action<TriggerParams?> action)
+        {
+            if (!_exitFromActions.ContainsKey(trigger))
+            {
+                _exitFromActions[trigger] = [];
+            }
+            _exitFromActions[trigger].Add(action);
+            return this;
+        }
+
+        internal List<Action<TriggerParams?>> GetEntryActions()
+        {
+            return _entryActions;
+        }
+        
+        internal List<Action<TriggerParams?>> GetExitActions()
+        {
+            return _exitActions;
+        }
+
+        internal List<Action<TriggerParams?>> GetEntryFromActions(TTrigger trigger)
+        {
+            return _entryFromActions.ContainsKey(trigger) ? _entryFromActions[trigger] : [];
+        }
+        
+        internal List<Action<TriggerParams?>> GetExitFromActions(TTrigger trigger)
+        {
+            return _exitFromActions.ContainsKey(trigger) ? _exitFromActions[trigger] : [];
         }
 
         public StateConfig SubstateOf(TState superState)
@@ -81,5 +123,7 @@ public partial class Machine<TState, TTrigger> where TState : notnull where TTri
         internal Dictionary<TTrigger, ICollection<TransitionBehavior>> TransitionBehaviorDict;
         private List<Action<TriggerParams?>> _entryActions;
         private List<Action<TriggerParams?>> _exitActions;
+        private Dictionary<TTrigger, List<Action<TriggerParams?>>> _entryFromActions;
+        private Dictionary<TTrigger, List<Action<TriggerParams?>>> _exitFromActions;
     }
 }

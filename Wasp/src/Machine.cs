@@ -6,6 +6,7 @@ public partial class Machine<TState, TTrigger> where TState : notnull where TTri
     {
         _currentState = initialState;
         _stateConfigs = new Dictionary<TState, StateConfig>();
+        _onTransitioned = null;
     }
 
     public StateConfig Configure(TState state)
@@ -18,7 +19,13 @@ public partial class Machine<TState, TTrigger> where TState : notnull where TTri
     {
         return _currentState;
     }
+
+    public void OnTransitioned(Action<TriggerParams?>? action)
+    {
+        _onTransitioned = action;
+    }
     
     private IDictionary<TState, StateConfig> _stateConfigs;
     private TState _currentState;
+    private Action<TriggerParams?>? _onTransitioned;
 }

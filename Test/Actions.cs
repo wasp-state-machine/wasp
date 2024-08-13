@@ -93,4 +93,21 @@ public class Actions
         Assert.True(b3);
         Assert.True(b4);
     }
+    
+    [Fact]
+    public void OnTransitioned()
+    {
+        bool b = false;
+        
+        var machine = new Machine<State, Trigger>(State.A);
+        
+        machine.OnTransitioned(_ => b = true);
+
+        machine.Configure(State.A)
+            .Permit(Trigger.X, State.B);
+        
+        machine.Fire(Trigger.X);
+        
+        Assert.True(b);
+    }
 }

@@ -18,10 +18,15 @@ Wasp is heavily inspired by [Stateless](https://github.com/dotnet-state-machine/
 - Mutually-inclusive guard clauses
 - Non-linear state inheritance
 - Weakly-typed parameterized transitions
-- State overriding
-- A significantly lighter codebase
+- State overriding [WIP]
 
 Wasp currently does not support
 
 - Asynchronous triggers
 - Graph generation
+
+## Installation
+
+Wasp is available as a [NuGet package](www.nuget.org/packages/Wasp). For usage in Unity projects, you can use [NuGetForUnity](https://github.com/GlitchEnzo/NuGetForUnity) to manage its installation.
+
+##

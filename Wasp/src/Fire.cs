@@ -26,7 +26,8 @@ public partial class Machine<TState, TTrigger> where TState : notnull where TTri
         
         ExecuteActionCollection(exitActions, triggerParams);
         ExecuteActionCollection(exitFromActions, triggerParams);
-        
+
+        _onTransitioned?.Invoke(triggerParams);
         _currentState = transitionBehavior.Destination;
         
         if (destinationStateConfigs == null) return;

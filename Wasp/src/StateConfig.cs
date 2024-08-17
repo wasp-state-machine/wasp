@@ -20,6 +20,7 @@ public partial class Machine<TState, TTrigger> where TState : notnull where TTri
         {
             TransitionBehavior transitionBehavior = new TransitionBehavior(trigger, _state, destination);
             AddTransitionBehavior(transitionBehavior);
+            _machine.Configure(destination);
             return this;
         }
         
@@ -27,6 +28,7 @@ public partial class Machine<TState, TTrigger> where TState : notnull where TTri
         {
             TransitionBehavior transitionBehavior = new TransitionBehavior(trigger, _state, destination, clause, weight);
             AddTransitionBehavior(transitionBehavior);
+            _machine.Configure(destination);
             return this;
         }
 
@@ -85,6 +87,7 @@ public partial class Machine<TState, TTrigger> where TState : notnull where TTri
         public StateConfig SubstateOf(TState superState)
         {
             SuperStates.Add(superState);
+            _machine.Configure(superState);
             return this;
         }
 
@@ -115,6 +118,11 @@ public partial class Machine<TState, TTrigger> where TState : notnull where TTri
                 TransitionBehaviorDict[transitionBehavior.Trigger] = [];
             }
             TransitionBehaviorDict[transitionBehavior.Trigger].Add(transitionBehavior);
+        }
+
+        internal TState State()
+        {
+            return _state;
         }
         
         private TState _state;

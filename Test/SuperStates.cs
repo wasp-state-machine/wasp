@@ -126,9 +126,4 @@ public class SuperStates
         Assert.Equal(State.D, machine2.State());
         
     }
-    
-    
-    
-    ///
-    
 }

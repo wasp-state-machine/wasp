@@ -7,6 +7,7 @@ public partial class Machine<TState, TTrigger> where TState : notnull where TTri
         _currentState = initialState;
         _stateConfigs = new Dictionary<TState, StateConfig>();
         _onTransitioned = null;
+        Configure(_currentState);
     }
 
     public StateConfig Configure(TState state)
@@ -18,6 +19,18 @@ public partial class Machine<TState, TTrigger> where TState : notnull where TTri
     public TState State()
     {
         return _currentState;
+    }
+
+    public bool IsInState(TState state)
+    {
+        var superStateConfigs = GetSuperStateConfigs(_currentState);
+        if (superStateConfigs is null) return false;
+
+        var matchingSuperStates = superStateConfigs
+            .Select(h => h.State())
+            .Where(h => Equals(h, state));
+
+        return matchingSuperStates.Count() != 0;
     }
 
     public void OnTransitioned(Action<TriggerParams?>? action)

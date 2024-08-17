@@ -1,16 +1,17 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>net8.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
-        <Version>0.0.2</Version>
+        <Version>0.0.5</Version>
         <Title>Wasp</Title>
         <Description>Lightweight state machine library for game
 development</Description>
         <Authors>q-0q</Authors>
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <LangVersion>12</LangVersion>
+        <TargetFrameworks>net48;net471</TargetFrameworks>
     </PropertyGroup>
 
     <ItemGroup>

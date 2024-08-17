@@ -4,7 +4,8 @@ public partial class Machine<TState, TTrigger> where TState : notnull where TTri
 {
     private ICollection<TransitionBehavior>? GetTransitionBehaviors(StateConfig stateConfig, TTrigger trigger)
     {
-        return stateConfig.TransitionBehaviorDict.GetValueOrDefault(trigger);
+        if (!stateConfig.TransitionBehaviorDict.ContainsKey(trigger)) return null;
+        return stateConfig.TransitionBehaviorDict[trigger];
     }
 
     private static void ExecuteActionCollection(List<Action<TriggerParams?>> actions, TriggerParams? triggerParams)
@@ -19,6 +20,7 @@ public partial class Machine<TState, TTrigger> where TState : notnull where TTri
     {
         foreach (var item in collection)
         {
+            if (item == null) continue;
             Console.Out.WriteLine(item.ToString());
         }
     }

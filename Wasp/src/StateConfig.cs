@@ -1,3 +1,5 @@
+using System.Runtime.Remoting.Messaging;
+
 namespace Wasp;
 
 public partial class Machine<TState, TTrigger> where TState : notnull where TTrigger : notnull
@@ -14,6 +16,7 @@ public partial class Machine<TState, TTrigger> where TState : notnull where TTri
             _entryFromActions = new Dictionary<TTrigger, List<Action<TriggerParams?>>>();
             _exitFromActions = new Dictionary<TTrigger, List<Action<TriggerParams?>>>();
             SuperStates = new List<TState>();
+            _reentryTriggers = new List<TTrigger>();
         }
     
         public StateConfig Permit(TTrigger trigger, TState destination)
@@ -29,6 +32,14 @@ public partial class Machine<TState, TTrigger> where TState : notnull where TTri
             TransitionBehavior transitionBehavior = new TransitionBehavior(trigger, _state, destination, clause, weight);
             AddTransitionBehavior(transitionBehavior);
             _machine.Configure(destination);
+            return this;
+        }
+
+        public StateConfig PermitReentry(TTrigger trigger)
+        {
+            if (_reentryTriggers.Contains(trigger)) return this;
+            Permit(trigger, _state);
+            _reentryTriggers.Add(trigger);
             return this;
         }
 
@@ -91,6 +102,11 @@ public partial class Machine<TState, TTrigger> where TState : notnull where TTri
             return this;
         }
 
+        internal bool HasReentryTrigger(TTrigger trigger)
+        {
+            return _reentryTriggers.Contains(trigger);
+        }
+
         internal List<StateConfig> GetSuperStateConfigs()
         {
             return ResolveSuperStateConfigsDepthFirst([], this).ToList();
@@ -133,5 +149,6 @@ public partial class Machine<TState, TTrigger> where TState : notnull where TTri
         private List<Action<TriggerParams?>> _exitActions;
         private Dictionary<TTrigger, List<Action<TriggerParams?>>> _entryFromActions;
         private Dictionary<TTrigger, List<Action<TriggerParams?>>> _exitFromActions;
+        private List<TTrigger> _reentryTriggers;
     }
 }

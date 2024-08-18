@@ -13,6 +13,8 @@ public partial class Machine<TState, TTrigger> where TState : notnull where TTri
         TransitionBehavior? transitionBehavior = DetermineTransitionBehavior(originStateConfigs, trigger, triggerParams);
         if (transitionBehavior is null) return;
         
+        if (DoesViolateReentryPolicy(transitionBehavior)) return;
+        
         var destination = transitionBehavior.Destination;
         var destinationStateConfigs = GetSuperStateConfigs(destination);
         
@@ -88,6 +90,14 @@ public partial class Machine<TState, TTrigger> where TState : notnull where TTri
             message += "\n\t" + transitionBehavior;
         }
         throw (new InvalidOperationException(message));
+    }
+
+    private bool DoesViolateReentryPolicy(TransitionBehavior transitionBehavior)
+    {
+        if (!Equals(_currentState, transitionBehavior.Destination)) return false;
+        var substateConfig = _stateConfigs[transitionBehavior.Origin];
+        if (substateConfig is null) return false;
+        return !substateConfig.HasReentryTrigger(transitionBehavior.Trigger);
     }
 
 }

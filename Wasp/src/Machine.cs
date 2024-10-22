@@ -37,6 +37,11 @@ public partial class Machine<TState, TTrigger> where TState : notnull where TTri
     {
         _onTransitioned = action;
     }
+    
+    public void OnTransitionCompleted(Action<TriggerParams?>? action)
+    {
+        _onTransitionCompleted = action;
+    }
 
     public void Assume(TState state)
     {
@@ -46,4 +51,5 @@ public partial class Machine<TState, TTrigger> where TState : notnull where TTri
     private IDictionary<TState, StateConfig> _stateConfigs;
     private TState _currentState;
     private Action<TriggerParams?>? _onTransitioned;
+    private Action<TriggerParams?>? _onTransitionCompleted;
 }

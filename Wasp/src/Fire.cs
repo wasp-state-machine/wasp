@@ -26,10 +26,11 @@ public partial class Machine<TState, TTrigger> where TState : notnull where TTri
             .SelectMany(h => h.GetExitFromActions(trigger))
             .ToList();
         
+        _onTransitioned?.Invoke(triggerParams);
+        
         ExecuteActionCollection(exitActions, triggerParams);
         ExecuteActionCollection(exitFromActions, triggerParams);
 
-        _onTransitioned?.Invoke(triggerParams);
         _currentState = transitionBehavior.Destination;
         
         if (destinationStateConfigs == null) return;
@@ -44,7 +45,8 @@ public partial class Machine<TState, TTrigger> where TState : notnull where TTri
         
         ExecuteActionCollection(entryActions, triggerParams);
         ExecuteActionCollection(entryFromActions, triggerParams);
-
+        
+        _onTransitionCompleted?.Invoke(triggerParams);
     }
     
     private TransitionBehavior? DetermineTransitionBehavior(List<StateConfig> originStateConfigs, TTrigger trigger, TriggerParams? triggerParams)

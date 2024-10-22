@@ -37,6 +37,11 @@ public partial class Machine<TState, TTrigger> where TState : notnull where TTri
     {
         _onTransitioned = action;
     }
+
+    public void Assume(TState state)
+    {
+        _currentState = state;
+    }
     
     private IDictionary<TState, StateConfig> _stateConfigs;
     private TState _currentState;

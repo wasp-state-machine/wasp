@@ -26,11 +26,9 @@ public partial class Machine<TState, TTrigger> where TState : notnull where TTri
         var superStateConfigs = GetSuperStateConfigs(_currentState);
         if (superStateConfigs is null) return false;
 
-        var matchingSuperStates = superStateConfigs
+        return superStateConfigs
             .Select(h => h.State())
-            .Where(h => Equals(h, state));
-
-        return matchingSuperStates.Count() != 0;
+            .Any(h => Equals(h, state));
     }
 
     public void OnTransitioned(Action<TriggerParams?>? action)

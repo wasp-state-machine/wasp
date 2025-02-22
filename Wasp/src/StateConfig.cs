@@ -1,5 +1,3 @@
-using System.Runtime.Remoting.Messaging;
-
 namespace Wasp;
 
 public partial class Machine<TState, TTrigger> where TState : notnull where TTrigger : notnull

@@ -31,7 +31,7 @@ public partial class Machine<TState, TTrigger> where TState : notnull where TTri
         ExecuteActionCollection(exitActions, triggerParams);
         ExecuteActionCollection(exitFromActions, triggerParams);
 
-        _currentState = transitionBehavior.Destination;
+        _currentState = destination;
         
         if (destinationStateConfigs == null) return;
 
@@ -45,6 +45,36 @@ public partial class Machine<TState, TTrigger> where TState : notnull where TTri
         
         ExecuteActionCollection(entryActions, triggerParams);
         ExecuteActionCollection(entryFromActions, triggerParams);
+        
+        _onTransitionCompleted?.Invoke(triggerParams);
+    }
+    
+    public void Jump(TState state, TriggerParams? triggerParams = null)
+    {
+        var originStateConfigs = GetSuperStateConfigs(_currentState);
+        var destinationStateConfigs = GetSuperStateConfigs(state);
+        
+        _onTransitioned?.Invoke(triggerParams);
+        
+        if (originStateConfigs != null)
+        {
+            var exitActions = originStateConfigs
+                .SelectMany(h => h.GetExitActions())
+                .ToList();
+            
+            ExecuteActionCollection(exitActions, triggerParams);
+        }
+
+        _currentState = state;
+        
+        if (destinationStateConfigs != null)
+        {
+            var entryActions = destinationStateConfigs
+                .SelectMany(h => h.GetEntryActions())
+                .ToList();
+
+            ExecuteActionCollection(entryActions, triggerParams);
+        }
         
         _onTransitionCompleted?.Invoke(triggerParams);
     }

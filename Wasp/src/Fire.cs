@@ -28,10 +28,10 @@ public partial class Machine<TState, TTrigger> where TState : notnull where TTri
         
         _onTransitioned?.Invoke(triggerParams);
         
+        _currentState = destination;
+        
         ExecuteActionCollection(exitActions, triggerParams);
         ExecuteActionCollection(exitFromActions, triggerParams);
-
-        _currentState = destination;
         
         if (destinationStateConfigs == null) return;
 

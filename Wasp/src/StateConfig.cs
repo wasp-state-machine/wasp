@@ -33,10 +33,9 @@ public partial class Machine<TState, TTrigger> where TState : notnull where TTri
             return this;
         }
 
-        public StateConfig PermitReentry(TTrigger trigger)
+        public StateConfig AllowReentry(TTrigger trigger)
         {
             if (_reentryTriggers.Contains(trigger)) return this;
-            Permit(trigger, _state);
             _reentryTriggers.Add(trigger);
             return this;
         }

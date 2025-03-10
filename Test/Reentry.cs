@@ -23,7 +23,8 @@ public class Reentry
         var machine2 = new Machine<State, Trigger>(State.A);
         
         machine2.Configure(State.A)
-            .PermitReentry(Trigger.X)
+            .Permit(Trigger.X, State.A)
+            .AllowReentry(Trigger.X)
             .OnExit(_ => b1 = true);
         
         machine2.Fire(Trigger.X);
@@ -60,7 +61,7 @@ public class Reentry
         
         machine.Configure(State.A)
             .SubstateOf(State.B)
-            .PermitReentry(Trigger.Y)
+            .AllowReentry(Trigger.Y)
             .OnExit(_ => b1 = true);
 
         machine.Configure(State.B)

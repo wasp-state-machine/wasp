@@ -92,9 +92,26 @@ public partial class Machine<TState, TTrigger> where TState : notnull where TTri
             .ToList();
         
         if (passedGuard.Count == 0) return null;
+
+        var blockingBehaviors = originStateConfigs
+            .SelectMany(h => GetBlockingBehaviors(h, trigger) ?? [])
+            .ToList();
+
+        var blockingPassedGuard = blockingBehaviors
+            .Where(h => h.GuardIsMet(triggerParams))
+            .ToList();
+
+        var blockedDestinations = new HashSet<TState>(
+            blockingPassedGuard.Select(b => b.BlockedDestination)
+                );
         
+        var unblocked = passedGuard
+            .Where(transitionBehavior => !blockedDestinations.Contains(transitionBehavior.Destination))
+            .ToList();
+
+
         int heaviestWeight = passedGuard.Max(h => h.Weight);
-        var heaviestBehaviors = passedGuard
+        var heaviestBehaviors = unblocked
             .Where(h => h.Weight == heaviestWeight)
             .ToList();
         

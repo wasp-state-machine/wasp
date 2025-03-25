@@ -9,7 +9,7 @@ public partial class Machine<TState, TTrigger> where TState : notnull where TTri
             _state = state;
             _machine = machine;
             TransitionBehaviorDict = new Dictionary<TTrigger, ICollection<TransitionBehavior>>();
-            BlockingBehaviorDict = new Dictionary<TTrigger, ICollection<TransitionBehavior>>();
+            BlockingBehaviorDict = new Dictionary<TTrigger, ICollection<BlockingBehavior>>();
             _entryActions = new List<Action<TriggerParams?>>();
             _exitActions = new List<Action<TriggerParams?>>();
             _entryFromActions = new Dictionary<TTrigger, List<Action<TriggerParams?>>>();
@@ -95,16 +95,16 @@ public partial class Machine<TState, TTrigger> where TState : notnull where TTri
         
         public StateConfig Block(TTrigger trigger, TState destination)
         {
-            TransitionBehavior transitionBehavior = new TransitionBehavior(trigger, _state, destination);
-            AddBlockingBehavior(transitionBehavior);
+            BlockingBehavior blockingBehavior = new BlockingBehavior(trigger, _state, destination);
+            AddBlockingBehavior(blockingBehavior);
             _machine.Configure(destination);
             return this;
         }
         
         public StateConfig BlockIf(TTrigger trigger, TState destination, Func<TriggerParams?, bool> clause)
         {
-            TransitionBehavior transitionBehavior = new TransitionBehavior(trigger, _state, destination, clause);
-            AddBlockingBehavior(transitionBehavior);
+            BlockingBehavior blockingBehavior = new BlockingBehavior(trigger, _state, destination, clause);
+            AddBlockingBehavior(blockingBehavior);
             _machine.Configure(destination);
             return this;
         }
@@ -150,13 +150,13 @@ public partial class Machine<TState, TTrigger> where TState : notnull where TTri
             TransitionBehaviorDict[transitionBehavior.Trigger].Add(transitionBehavior);
         }
         
-        private void AddBlockingBehavior(TransitionBehavior transitionBehavior)
+        private void AddBlockingBehavior(BlockingBehavior blockingBehavior)
         {
-            if (!BlockingBehaviorDict.ContainsKey(transitionBehavior.Trigger))
+            if (!BlockingBehaviorDict.ContainsKey(blockingBehavior.Trigger))
             {
-                BlockingBehaviorDict[transitionBehavior.Trigger] = [];
+                BlockingBehaviorDict[blockingBehavior.Trigger] = [];
             }
-            BlockingBehaviorDict[transitionBehavior.Trigger].Add(transitionBehavior);
+            BlockingBehaviorDict[blockingBehavior.Trigger].Add(blockingBehavior);
         }
 
         internal TState State()
@@ -168,7 +168,7 @@ public partial class Machine<TState, TTrigger> where TState : notnull where TTri
         protected List<TState> SuperStates;
         private Machine<TState, TTrigger> _machine;
         internal Dictionary<TTrigger, ICollection<TransitionBehavior>> TransitionBehaviorDict;
-        internal Dictionary<TTrigger, ICollection<TransitionBehavior>> BlockingBehaviorDict;
+        internal Dictionary<TTrigger, ICollection<BlockingBehavior>> BlockingBehaviorDict;
         private List<Action<TriggerParams?>> _entryActions;
         private List<Action<TriggerParams?>> _exitActions;
         private Dictionary<TTrigger, List<Action<TriggerParams?>>> _entryFromActions;

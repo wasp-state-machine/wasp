@@ -7,6 +7,12 @@ public partial class Machine<TState, TTrigger> where TState : notnull where TTri
         if (!stateConfig.TransitionBehaviorDict.ContainsKey(trigger)) return null;
         return stateConfig.TransitionBehaviorDict[trigger];
     }
+    
+    private ICollection<BlockingBehavior>? GetBlockingBehaviors(StateConfig stateConfig, TTrigger trigger)
+    {
+        if (!stateConfig.BlockingBehaviorDict.ContainsKey(trigger)) return null;
+        return stateConfig.BlockingBehaviorDict[trigger];
+    }
 
     private static void ExecuteActionCollection(List<Action<TriggerParams?>> actions, TriggerParams? triggerParams)
     {

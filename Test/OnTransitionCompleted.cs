@@ -28,6 +28,8 @@ public class OnTransitionCompleted
         machine.OnTransitioned(OnTransitioned);
         machine.OnTransitionCompleted(OnCompleted);
         
+        machine.BakeRecursiveSuperstates();
+        
         machine.Fire(Trigger.X);
         
         void OnTransitioned(TriggerParams? triggerParams)

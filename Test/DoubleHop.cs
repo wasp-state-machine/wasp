@@ -25,6 +25,8 @@ public class DoubleHop
         machine.Configure(State.B)
             .Permit(Trigger.X, State.C);
         
+        machine.BakeRecursiveSuperstates();
+        
         machine.Fire(Trigger.X);
         
         Assert.True(machine.IsInState(State.C));

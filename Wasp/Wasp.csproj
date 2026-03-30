@@ -3,7 +3,7 @@
     <PropertyGroup>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
-        <Version>0.0.12</Version>
+        <Version>1.0.0</Version>
         <Title>Wasp</Title>
         <Description>Lightweight state machine library for game
 development</Description>
@@ -12,6 +12,7 @@ development</Description>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
         <LangVersion>12</LangVersion>
         <TargetFrameworks>net48;net471</TargetFrameworks>
+        <RepositoryUrl>https://github.com/wasp-state-machine/wasp</RepositoryUrl>
     </PropertyGroup>
 
     <ItemGroup>

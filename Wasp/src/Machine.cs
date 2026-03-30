@@ -45,8 +45,15 @@ public partial class Machine<TState, TTrigger> where TState : notnull where TTri
     {
         _currentState = state;
     }
-    
 
+    public void BakeRecursiveSuperstates()
+    {
+        foreach (var kvp in _stateConfigs)
+        {
+            kvp.Value.BakeRecursiveSuperstates();
+        }
+    }
+    
     
     private IDictionary<TState, StateConfig> _stateConfigs;
     private TState _currentState;

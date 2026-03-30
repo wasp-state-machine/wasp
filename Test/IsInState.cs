@@ -22,6 +22,8 @@ public class IsInState
         machine.Configure(State.C)
             .SubstateOf(State.D);
         
+        machine.BakeRecursiveSuperstates();
+        
         Assert.True(machine.IsInState(State.D));
     }
     

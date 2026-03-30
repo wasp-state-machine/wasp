@@ -17,6 +17,8 @@ public class Block
         machine.Configure(State.C)
             .Permit(Trigger.X, State.B);
         
+        machine.BakeRecursiveSuperstates();
+        
         Assert.Equal(State.A, machine.State());
         
         machine.Fire(Trigger.X);

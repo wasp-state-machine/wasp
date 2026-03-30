@@ -27,6 +27,7 @@ public class Actions
         machine.Configure(State.B)
             .OnEntry(_ => b3 = true);
         
+        machine.BakeRecursiveSuperstates();
         machine.Fire(Trigger.X);
         
         Assert.True(b1);

@@ -21,6 +21,8 @@ public class Jump
         machine.Configure(State.B)
             .OnEntry(_ => b3 = true);
         
+        machine.BakeRecursiveSuperstates();
+        
         machine.Jump(State.B);
         
         Assert.True(machine.IsInState(State.B));

@@ -31,6 +31,8 @@ public class SuperStates
         machine.Configure(State.C)
             .Permit(Trigger.Y, State.D);
         
+        machine.BakeRecursiveSuperstates();
+        
         machine.Fire(Trigger.Y);
         
         Assert.Equal(State.D, machine.State());
@@ -52,6 +54,8 @@ public class SuperStates
         machine.Configure(State.C)
             .Permit(Trigger.X, State.D);
         
+        machine.BakeRecursiveSuperstates();
+        
         Assert.Throws<InvalidOperationException>(() => { machine.Fire(Trigger.X); });
     }
     
@@ -67,6 +71,7 @@ public class SuperStates
         machine.Configure(State.C)
             .PermitIf(Trigger.X, State.D, LeZero);
 
+        machine.BakeRecursiveSuperstates();
 
         TestParams testParams = new TestParams() { ParamA = -1 };
         
@@ -88,6 +93,7 @@ public class SuperStates
         machine.Configure(State.C)
             .PermitIf(Trigger.X, State.D, LeZero);
 
+        machine.BakeRecursiveSuperstates();
 
         TestParams testParams = new TestParams() { ParamA = 0 };
         Assert.Throws<InvalidOperationException>(() => { machine.Fire(Trigger.X, testParams); });
@@ -107,6 +113,8 @@ public class SuperStates
         machine1.Configure(State.C)
             .PermitIf(Trigger.X, State.D, LeZero, 20);
         
+        machine1.BakeRecursiveSuperstates();
+        
         TestParams testParams = new TestParams() { ParamA = 0 };
         
         Assert.Throws<InvalidOperationException>(() => { machine1.Fire(Trigger.X, testParams); });
@@ -120,6 +128,7 @@ public class SuperStates
         machine2.Configure(State.C)
             .PermitIf(Trigger.X, State.D, LeZero, 20);
 
+        machine2.BakeRecursiveSuperstates();
         
         machine2.Fire(Trigger.X, testParams);
         

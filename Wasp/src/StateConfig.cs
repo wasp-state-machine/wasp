@@ -16,6 +16,7 @@ public partial class Machine<TState, TTrigger> where TState : notnull where TTri
             _exitFromActions = new Dictionary<TTrigger, List<Action<TriggerParams?>>>();
             SuperStates = new List<TState>();
             _reentryTriggers = new List<TTrigger>();
+            BakedRecursiveSuperstates = new List<StateConfig>();
         }
     
         public StateConfig Permit(TTrigger trigger, TState destination)
@@ -123,6 +124,7 @@ public partial class Machine<TState, TTrigger> where TState : notnull where TTri
 
         internal List<StateConfig> GetSuperStateConfigs()
         {
+            if (BakedRecursiveSuperstates.Count != 0) return BakedRecursiveSuperstates;
             return ResolveSuperStateConfigsDepthFirst([], this).ToList();
         }
 
@@ -159,6 +161,11 @@ public partial class Machine<TState, TTrigger> where TState : notnull where TTri
             BlockingBehaviorDict[blockingBehavior.Trigger].Add(blockingBehavior);
         }
 
+        internal void BakeRecursiveSuperstates()
+        {
+            BakedRecursiveSuperstates = GetSuperStateConfigs();
+        }
+
         internal TState State()
         {
             return _state;
@@ -166,6 +173,7 @@ public partial class Machine<TState, TTrigger> where TState : notnull where TTri
         
         private TState _state;
         protected List<TState> SuperStates;
+        internal List<StateConfig> BakedRecursiveSuperstates;
         private Machine<TState, TTrigger> _machine;
         internal Dictionary<TTrigger, ICollection<TransitionBehavior>> TransitionBehaviorDict;
         internal Dictionary<TTrigger, ICollection<BlockingBehavior>> BlockingBehaviorDict;

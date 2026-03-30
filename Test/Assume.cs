@@ -22,6 +22,8 @@ public class Assume
         machine.Configure(State.B)
             .OnEntry(_ => b3 = true);
         
+        machine.BakeRecursiveSuperstates();
+        
         machine.Assume(State.B);
         
         Assert.False(b1);

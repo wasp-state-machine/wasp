@@ -16,6 +16,8 @@ public class Reentry
             .Permit(Trigger.X, State.A)
             .OnExit(_ => b1 = true);
         
+        machine.BakeRecursiveSuperstates();
+        
         machine.Fire(Trigger.X);
         
         Assert.False(b1);
@@ -26,6 +28,8 @@ public class Reentry
             .Permit(Trigger.X, State.A)
             .AllowReentry(Trigger.X)
             .OnExit(_ => b1 = true);
+        
+        machine2.BakeRecursiveSuperstates();
         
         machine2.Fire(Trigger.X);
         
@@ -45,6 +49,8 @@ public class Reentry
 
         machine.Configure(State.B)
             .Permit(Trigger.X, State.A);
+        
+        machine.BakeRecursiveSuperstates();
         
         machine.Fire(Trigger.X);
         
@@ -66,6 +72,8 @@ public class Reentry
 
         machine.Configure(State.B)
             .Permit(Trigger.X, State.A);
+        
+        machine.BakeRecursiveSuperstates();
         
         machine.Fire(Trigger.X);
         

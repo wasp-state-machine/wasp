@@ -96,30 +96,46 @@ private void ExecuteBufferedActions(TriggerParams? triggerParams)
         _onTransitionCompleted?.Invoke(triggerParams);
     }
     
+// Pre-allocate this list as a class member to avoid per-frame allocation
+    private readonly List<TransitionBehavior> _candidateBehaviors = new List<TransitionBehavior>(16);
+
     private TransitionBehavior? DetermineTransitionBehavior(List<StateConfig> originStateConfigs, TTrigger trigger, TriggerParams? triggerParams)
     {
-        var transitionBehaviors = originStateConfigs
-            .SelectMany(h => GetTransitionBehaviors(h, trigger) ?? [])
-            .ToList();
+        _candidateBehaviors.Clear();
+        int heaviestWeight = int.MinValue;
         
-        if (transitionBehaviors.Count == 0) return null;
-        
-        var passedGuard = transitionBehaviors
-            .Where(h => h.GuardIsMet(triggerParams))
-            .ToList();
-        
-        if (passedGuard.Count == 0) return null;
+        for (int i = 0; i < originStateConfigs.Count; i++)
+        {
+            var behaviors = GetTransitionBehaviors(originStateConfigs[i], trigger);
+            if (behaviors == null) continue;
 
-        int heaviestWeight = passedGuard.Max(h => h.Weight);
-        var heaviestBehaviors = passedGuard
-            .Where(h => h.Weight == heaviestWeight)
-            .ToList();
-        
-        if (heaviestBehaviors.Count == 0) return null;
-        
-        HandleAmbiguousTransitions(trigger, heaviestBehaviors);
+            // Change the inner loop to foreach
+            foreach (var behavior in behaviors) 
+            {
+                if (behavior.GuardIsMet(triggerParams))
+                {
+                    if (behavior.Weight > heaviestWeight)
+                    {
+                        heaviestWeight = behavior.Weight;
+                        _candidateBehaviors.Clear();
+                        _candidateBehaviors.Add(behavior);
+                    }
+                    else if (behavior.Weight == heaviestWeight)
+                    {
+                        _candidateBehaviors.Add(behavior);
+                    }
+                }
+            }
+        }
 
-        return heaviestBehaviors[0];
+        if (_candidateBehaviors.Count == 0) return null;
+        
+        if (_candidateBehaviors.Count > 1)
+        {
+            HandleAmbiguousTransitions(trigger, _candidateBehaviors);
+        }
+
+        return _candidateBehaviors[0];
     }
 
     private List<StateConfig>? GetSuperStateConfigs(TState state)

@@ -5,6 +5,8 @@ namespace Wasp;
 public partial class Machine<TState, TTrigger> where TState : notnull where TTrigger : notnull
 {
     
+    private readonly List<Action<TriggerParams?>> _actionBuffer = new List<Action<TriggerParams?>>(16);
+
     public void Fire(TTrigger trigger, TriggerParams? triggerParams = null)
     {
         var originStateConfigs = GetSuperStateConfigs(_currentState);
@@ -16,38 +18,53 @@ public partial class Machine<TState, TTrigger> where TState : notnull where TTri
         if (DoesViolateReentryPolicy(transitionBehavior)) return;
         
         var destination = transitionBehavior.Destination;
-        var destinationStateConfigs = GetSuperStateConfigs(destination);
         
-        var exitActions = originStateConfigs
-            .SelectMany(h => h.GetExitActions())
-            .ToList();
-
-        var exitFromActions = originStateConfigs
-            .SelectMany(h => h.GetExitFromActions(trigger))
-            .ToList();
+        FillBuffer(originStateConfigs, config => config.GetExitActions());
+        FillBuffer(originStateConfigs, config => config.GetExitFromActions(trigger));
         
         _onTransitioned?.Invoke(triggerParams);
-        
         _currentState = destination;
         
-        ExecuteActionCollection(exitActions, triggerParams);
-        ExecuteActionCollection(exitFromActions, triggerParams);
+        ExecuteBufferedActions(triggerParams);
         
+        var destinationStateConfigs = GetSuperStateConfigs(destination);
         if (destinationStateConfigs == null) return;
 
-        var entryActions = destinationStateConfigs
-            .SelectMany(h => h.GetEntryActions())
-            .ToList();
-
-        var entryFromActions = destinationStateConfigs
-            .SelectMany(h => h.GetEntryFromActions(trigger))
-            .ToList();
+        FillBuffer(destinationStateConfigs, config => config.GetEntryActions());
+        FillBuffer(destinationStateConfigs, config => config.GetEntryFromActions(trigger));
         
-        ExecuteActionCollection(entryActions, triggerParams);
-        ExecuteActionCollection(entryFromActions, triggerParams);
+        ExecuteBufferedActions(triggerParams);
         
         _onTransitionCompleted?.Invoke(triggerParams);
     }
+
+    private void FillBuffer(List<StateConfig> configs, Func<StateConfig, IEnumerable<Action<TriggerParams?>>> selector)
+    {
+        for (int i = 0; i < configs.Count; i++)
+        {
+            var actions = selector(configs[i]);
+            if (actions == null) continue;
+            foreach (var action in actions)
+            {
+                if (action != null) _actionBuffer.Add(action);
+            }
+        }
+    }
+
+private void ExecuteBufferedActions(TriggerParams? triggerParams)
+{
+    if (_actionBuffer.Count == 0) return;
+
+    // We copy the buffer to a local array or loop in a way that allows recursion
+    // To be 100% safe against "Double Hops", we iterate a local snapshot
+    var actionsToRun = _actionBuffer.ToArray(); 
+    _actionBuffer.Clear();
+
+    for (int i = 0; i < actionsToRun.Length; i++)
+    {
+        actionsToRun[i](triggerParams);
+    }
+}
     
     public void Jump(TState state, TriggerParams? triggerParams = null)
     {

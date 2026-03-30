@@ -24,11 +24,18 @@ public partial class Machine<TState, TTrigger> where TState : notnull where TTri
     public bool IsInState(TState state)
     {
         var superStateConfigs = GetSuperStateConfigs(_currentState);
-        if (superStateConfigs is null) return false;
+        if (superStateConfigs == null) return false;
+        
+        foreach (var t in superStateConfigs)
+        {
+            // Use EqualityComparer to avoid boxing if TState is a value type (like an Enum)
+            if (EqualityComparer<TState>.Default.Equals(t.State(), state))
+            {
+                return true;
+            }
+        }
 
-        return superStateConfigs
-            .Select(h => h.State())
-            .Any(h => Equals(h, state));
+        return false;
     }
 
     public void OnTransitioned(Action<TriggerParams?>? action)

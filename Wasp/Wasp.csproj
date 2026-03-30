@@ -3,7 +3,7 @@
     <PropertyGroup>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
-        <Version>1.1.1</Version>
+        <Version>1.1.2</Version>
         <Title>Wasp</Title>
         <Description>Lightweight state machine library for game
 development</Description>

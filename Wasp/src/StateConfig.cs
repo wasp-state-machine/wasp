@@ -9,7 +9,6 @@ public partial class Machine<TState, TTrigger> where TState : notnull where TTri
             _state = state;
             _machine = machine;
             TransitionBehaviorDict = new Dictionary<TTrigger, ICollection<TransitionBehavior>>();
-            BlockingBehaviorDict = new Dictionary<TTrigger, ICollection<BlockingBehavior>>();
             _entryActions = new List<Action<TriggerParams?>>();
             _exitActions = new List<Action<TriggerParams?>>();
             _entryFromActions = new Dictionary<TTrigger, List<Action<TriggerParams?>>>();
@@ -94,22 +93,6 @@ public partial class Machine<TState, TTrigger> where TState : notnull where TTri
             return _exitFromActions.ContainsKey(trigger) ? _exitFromActions[trigger] : [];
         }
         
-        public StateConfig Block(TTrigger trigger, TState destination)
-        {
-            BlockingBehavior blockingBehavior = new BlockingBehavior(trigger, _state, destination);
-            AddBlockingBehavior(blockingBehavior);
-            _machine.Configure(destination);
-            return this;
-        }
-        
-        public StateConfig BlockIf(TTrigger trigger, TState destination, Func<TriggerParams?, bool> clause)
-        {
-            BlockingBehavior blockingBehavior = new BlockingBehavior(trigger, _state, destination, clause);
-            AddBlockingBehavior(blockingBehavior);
-            _machine.Configure(destination);
-            return this;
-        }
-
         public StateConfig SubstateOf(TState superState)
         {
             SuperStates.Add(superState);
@@ -152,15 +135,6 @@ public partial class Machine<TState, TTrigger> where TState : notnull where TTri
             TransitionBehaviorDict[transitionBehavior.Trigger].Add(transitionBehavior);
         }
         
-        private void AddBlockingBehavior(BlockingBehavior blockingBehavior)
-        {
-            if (!BlockingBehaviorDict.ContainsKey(blockingBehavior.Trigger))
-            {
-                BlockingBehaviorDict[blockingBehavior.Trigger] = [];
-            }
-            BlockingBehaviorDict[blockingBehavior.Trigger].Add(blockingBehavior);
-        }
-
         internal void BakeRecursiveSuperstates()
         {
             BakedRecursiveSuperstates = GetSuperStateConfigs();
@@ -176,7 +150,6 @@ public partial class Machine<TState, TTrigger> where TState : notnull where TTri
         internal List<StateConfig> BakedRecursiveSuperstates;
         private Machine<TState, TTrigger> _machine;
         internal Dictionary<TTrigger, ICollection<TransitionBehavior>> TransitionBehaviorDict;
-        internal Dictionary<TTrigger, ICollection<BlockingBehavior>> BlockingBehaviorDict;
         private List<Action<TriggerParams?>> _entryActions;
         private List<Action<TriggerParams?>> _exitActions;
         private Dictionary<TTrigger, List<Action<TriggerParams?>>> _entryFromActions;
